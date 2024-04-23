@@ -29,7 +29,6 @@ export class TaskController {
 
     @Delete('/:id')
     deleteTask(@Param('id') id:string):TASK[]{
-        console.log("here");
         return this.taskService.deleteTask(id);
     }
 
