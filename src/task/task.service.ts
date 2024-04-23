@@ -23,4 +23,8 @@ export class TaskService {
 
         return task;
     }
+
+    getTaskById(id:string):TASK{
+        return this.tasks.find((task)=>task.id === id);
+    }
 }
