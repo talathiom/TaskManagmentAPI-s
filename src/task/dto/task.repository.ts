@@ -3,6 +3,7 @@ import { DataSource, Repository } from 'typeorm';
 import { task } from './task.entity';
 import { CreateTaskDto } from './createTask.DTO';
 import { taskStatus } from '../taskStatus.enum';
+import { searchDto } from './search.DTO';
 
 @Injectable()
 export class taskRepository extends Repository<task> {
@@ -24,5 +25,18 @@ export class taskRepository extends Repository<task> {
 
     await this.save(taskObj);
     return taskObj;
+  }
+
+  async getTasks(searchDto:searchDto):Promise<task[]>{
+    const {status,search} = searchDto;
+    const query = this.createQueryBuilder('task');
+    if (status){
+      query.andWhere('task.STATUS = :status',{status});
+    }
+    if(search){
+      query.andWhere('(LOWER(task.TITLE) LIKE LOWER(:search) OR LOWER(task.DESCRIPTION) LIKE LOWER(:search))',{search:`%${search}%`});
+    }
+    const tasks = await query.getMany();
+    return tasks;
   }
 }

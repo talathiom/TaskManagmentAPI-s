@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Query } from '@nestjs/common';
 import { taskStatus } from './taskStatus.enum';
 import { CreateTaskDto } from './dto/createTask.DTO';
 import { searchDto } from './dto/search.DTO';
@@ -25,49 +25,24 @@ export class TaskService {
   createTask(createTaskDto: CreateTaskDto): Promise<task> {
     return this.taskRepository.createTask(createTaskDto);
   }
-  /*private tasks: TASK[] = [];
 
-  getAllTasks(): TASK[] {
-    return this.tasks;
+  async deleteTask(id: string): Promise<void>{
+    const result = await this.taskRepository.delete(id);
+    if(result.affected === 0){
+      throw new NotFoundException(`Task with ID "${id}" not found`)
+    }
   }
 
-  
-
-  getTaskById(id: string): TASK {
-    const task =  this.tasks.find((task) => task.id === id);
-    if(!task){
-        throw new NotFoundException(`Task with ID "${id}" not found`)
+  async updateTask(status: taskStatus, id: string): Promise<task> {
+    const taskObj = await this.getTaskById(id);
+    if (taskObj) {
+      taskObj.STATUS = status;
     }
-    return task;
+    await this.taskRepository.save(taskObj)
+    return taskObj;
   }
 
-  deleteTask(id: string): TASK[] {
-    this.tasks = this.tasks.filter((task) => task.id !== id);
-    return this.tasks;
+  async getTasks(searchDto:searchDto):Promise<task[]>{
+    return this.taskRepository.getTasks(searchDto);
   }
-
-  updateTask(status: taskStatus, id: string): TASK {
-    const task = this.getTaskById(id);
-    if (task) {
-      task.status = status;
-    }
-    return task;
-  }
-
-  getTasksWithFilter(searchDto: searchDto): TASK[] {
-    const { status, search } = searchDto;
-    let tasks = this.getAllTasks();
-    if (status) {
-      tasks = tasks.filter((task) => task.status === status);
-    }
-    if (search) {
-      tasks = tasks.filter((task) => {
-        if (task.title.includes(search) || task.description.includes(search)) {
-          return true;
-        }
-        return false;
-      });
-    }
-    return tasks;
-  }*/
 }

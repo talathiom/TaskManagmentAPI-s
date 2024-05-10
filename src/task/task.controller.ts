@@ -22,9 +22,29 @@ export class TaskController {
   getTaskById(@Param('id') id: string): Promise<task> {
     return this.taskService.getTaskById(id);
   }
+
   @Post()
   createTask(@Body() createTaskDto: CreateTaskDto): Promise<task> {
     return this.taskService.createTask(createTaskDto);
+  }
+
+  @Delete('/:id')
+  deleteTask(@Param('id') id: string): Promise<void> {
+    return this.taskService.deleteTask(id);
+  }
+
+  @Patch(':id/status')
+  updateTask(
+    @Param('id') id: string,
+    @Body() updateTaskDto:updateTaskDto,
+  ): Promise<task> {
+    const {status}=updateTaskDto
+    return this.taskService.updateTask(status, id);
+  }
+
+  @Get()
+  async getTask(@Query() searchDto:searchDto):Promise<task[]>{
+      return this.taskService.getTasks(searchDto)
   }
 
 
