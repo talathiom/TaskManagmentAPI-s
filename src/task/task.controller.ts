@@ -9,15 +9,26 @@ import {
   Query,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
-import { TASK, taskStatus } from './task.model';
+import { taskStatus } from './taskStatus.enum';
 import { CreateTaskDto } from './dto/createTask.DTO';
 import { searchDto } from './dto/search.DTO';
 import { updateTaskDto } from './dto/update-task-status.dto';
+import { task } from './dto/task.entity';
 
 @Controller('task')
 export class TaskController {
   constructor(private taskService: TaskService) {}
+  @Get('/:id')
+  getTaskById(@Param('id') id: string): Promise<task> {
+    return this.taskService.getTaskById(id);
+  }
+  @Post()
+  createTask(@Body() createTaskDto: CreateTaskDto): Promise<task> {
+    return this.taskService.createTask(createTaskDto);
+  }
 
+
+/*
   @Get()
   getTasks(@Query() searchDto: searchDto): TASK[] {
     if (Object.keys(searchDto).length) {
@@ -26,10 +37,7 @@ export class TaskController {
     return this.taskService.getAllTasks();
   }
 
-  @Post()
-  createTask(@Body() createTaskDto: CreateTaskDto): TASK {
-    return this.taskService.createTask(createTaskDto);
-  }
+  
 
   @Get('/:id')
   getTaskById(@Param('id') id: string): TASK {
@@ -49,4 +57,5 @@ export class TaskController {
     const {status}=updateTaskDto
     return this.taskService.updateTask(status, id);
   }
+*/
 }
