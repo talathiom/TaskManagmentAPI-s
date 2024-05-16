@@ -6,7 +6,7 @@ import { taskRepository } from './dto/task.repository';
 import { task } from './dto/task.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([task,taskRepository])],
+  imports:[TypeOrmModule.forFeature([task])],
   controllers: [TaskController],
   providers: [TaskService,taskRepository]
 })
